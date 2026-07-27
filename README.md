@@ -1,15 +1,29 @@
 # RNA-seq-analysis
-# RNA-Seq Analysis Pipeline
 
 This repository contains a **Nextflow pipeline** to analyze RNA-Seq data from SRA samples.  
 The pipeline performs the following steps:
 
-1. Download SRA samples
-2. Perform quality control with FastQC
-3. Align reads to the reference genome with HISAT2
-4. Count reads per gene with featureCounts
-5. Merge counts and perform differential expression analysis with DESeq2
-6. Extract expression of FOXP3 and identify most differentially expressed genes
+
+1. Perform quality control with FastQC
+2. Align reads to the reference genome with HISAT2
+3. Count reads per gene with featureCounts
+4. Merge counts and perform differential expression analysis with DESeq2
+5. Extract expression of FOXP3 and identify most differentially expressed genes
+
+But first, to get the samples, you can use [fasterqdump](https://github.com/ncbi/sra-tools/wiki/HowTo:-fasterq-dump) or [kingfisher](https://wwood.github.io/kingfisher-download/). Here I recomend using kingfisher since its easier to use, faster and gives less errors. Why using this isntead of an usual wget or download? Files can get corrupted due to many different reasons (fluctuations of wifi conecction, errors in the dowload) and the dowloaded file can be corrupted. So, as a good standard, please use any of the resourse availiable like this one. To dowload the fastq files just get [their docker image](https://hub.docker.com/r/wwood/kingfisher/tags). Then run:
+
+```bash
+docker run --rm \
+  -v /path/to/your/foolder:/data \
+  -w /data \
+  wwood/kingfisher:0.4.1 \
+  get -r SRR5223500 \ // Or whatever SRR id you want
+  -m aws-http prefetch \
+  --output-format-possibilities fastq.gz \
+  -t 4
+
+```
+
 
 ---
 
